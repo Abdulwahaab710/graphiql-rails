@@ -40,7 +40,7 @@ task :update_graphiql do
   FileUtils.mkdir_p(update_path)
   FileUtils.cd(update_path) do
     sh("npm init --force")
-    sh("npm install graphiql react react-dom")
+    sh("npm install graphiql react react-dom graphql")
 
     FileUtils.cd("./node_modules/graphiql") do
       new_version = npm_version("./package.json")
@@ -67,6 +67,14 @@ task :update_graphiql do
 
       puts "Copying ReactDOM #{new_version}"
       FileUtils.cp("./umd/react-dom.development.js", "../../../app/assets/javascripts/graphiql/rails/react-dom-#{new_version}.js")
+    end
+
+    FileUtils.cd("./node_modules/graphql") do
+      new_version = npm_version("./package.json")
+      new_js_versions["graphql"] = new_version
+
+       puts "Copying graphql #{new_version}"
+      FileUtils.cp("./graphql.js", "../../../app/assets/javascripts/graphiql/rails/graphql-#{new_version}.js")
     end
   end
 
